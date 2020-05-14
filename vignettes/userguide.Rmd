@@ -1,0 +1,141 @@
+---
+title: Cell type references datasets
+author:
+- name: Aaron Lun
+  email: infinite.monkeys.with.keyboards@gmail.com
+- name: Jared M. Andrews
+  affiliation: Washington University in St. Louis, School of Medicine, St. Louis, MO, USA
+- name: Friederike Dündar
+  affiliation: Applied Bioinformatics Core, Weill Cornell Medicine
+- name: Daniel Bunis
+  affiliation: Bakar Computational Health Sciences Institute, University of California San Francisco, San Francisco, CA
+date: "Revised: May 15th, 2020"
+output:
+  BiocStyle::html_document:
+    toc_float: true
+package: CellTypeReferences
+bibliography: ref.bib
+vignette: >
+  %\VignetteIndexEntry{Available references}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE, results="hide", message=FALSE}
+knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+library(BiocStyle)
+```
+
+# Overview
+
+The `r Biocpkg("CellTypeReferences")` package provides convenient access to several cell type reference datasets. 
+Most of these references are derived from bulk RNA-seq or microarray data of cell populations
+that (hopefully) consist of a pure cell type after sorting and/or culturing.
+Each dataset contains a log-normalized expression matrix that is intended to be comparable 
+to log-UMI counts from common single-cell protocols,
+typcially after adjusting bulk RNA-seq data for differences in gene length.
+It also provides three levels of cell type annotation in its column metadata:
+
+- `label.main`, broad annotation that defines the major cell types.
+This has few unique levels that allows for fast annotation but at low resolution.
+- `label.fine`, fine-grained annotation that defines subtypes or states.
+This has more unique levels that results in slower annotation but at much higher resolution.
+- `label.ont`, fine-grained annotation mapped to the standard vocabulary in the [Cell Ontology](https://www.ebi.ac.uk/ols/ontologies/cl).
+This enables synchronization of labels across references as well as dynamic adjustment of the resolution.
+
+By default, gene annotation is returned in terms of gene symbols,
+but they can be coerced to Ensembl annotation with `ensembl=TRUE` for more robust cross-referencing across studies.
+More details for each dataset can be viewed on the corresponding help page for its retrieval function (e.g., `?ImmGenData`).
+
+# General-purpose references
+
+## Human primary cell atlas (HPCA)
+
+@hpcaRef
+  
+```{r}
+library(CellTypeReferences)
+ref <- HumanPrimaryCellAtlasData()
+```
+
+```{r tabulate, echo=FALSE}
+samples <- colData(ref)[,c("label.main", "label.fine","label.ont")]
+samples <- as.data.frame(samples)
+DT::datatable(unique(samples))
+```
+
+## Blueprint/ENCODE
+
+Blueprint [@blueprintRef] and Encode [@encodeRef],
+
+```{r}
+ref <- BlueprintEncodeData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+## Mouse RNA-seq
+
+A collection of mouse data sets downloaded from GEO [@Benayoun2019].
+
+```{r}
+ref <- MouseRNAseqData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+# Immune references
+
+## Database of Immune Cell Expression (DICE)
+
+The [Database for Immune Cell Expression(/eQTLs/Epigenomics)](https://dice-database.org) [@diceRef].
+
+```{r}
+ref <- DatabaseImmuneCellExpressionData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+## Novershtern hematopoietic data
+
+Novershtern Hematopoietic Cell Data - [GSE24759](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE24759) - formerly known as Differentiation Map [@dmapRef].
+
+```{r}
+ref <- NovershternHematopoieticData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+## Monaco immune data
+
+Monaco Immune Cell Data - [GSE107011](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE107011)  [@monaco_immuneRef].
+
+```{r}
+ref <- MonacoImmuneData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+## Immunological Genome Project (ImmGen)
+
+The murine [ImmGen](http://www.immgen.org/) [@ImmGenRef]
+
+```{r}
+ref <- ImmGenData()
+```
+
+```{r, echo=FALSE, ref.label="tabulate"}
+```
+
+# Session information {-}
+
+```{r}
+sessionInfo()
+```
+
+# References {-}
