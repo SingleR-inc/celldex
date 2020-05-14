@@ -1,0 +1,40 @@
+Package: CellTypeReferences
+Title: Collection of Cell Type Reference Datasets 
+Version: 0.98.0
+Date: 2020-05-14
+Authors@R: c(person("Dvir", "Aran", email="dvir.aran@ucsf.edu", role=c("aut")),
+    person("Aaron", "Lun", email="infinite.monkeys.with.keyboards@gmail.com", role=c("aut", "cre", "cph")),
+    person("Daniel", "Bunis", role="aut"),
+    person("Jared", "Andrews", email = "jared.andrews07@gmail.com", role="aut"),
+    person("Friederike", "Dündar", email = "frd2007@med.cornell.edu", role="aut"))
+Description: 
+    Provides a collection of cell type reference datasets (mostly RNA-seq) 
+    for use in procedures like automated annotation of single-cell data or
+    deconvolution of bulk RNA-seq.
+License: GPL-3 
+Depends: SummarizedExperiment
+Imports: 
+    utils,
+    ExperimentHub,
+    AnnotationHub,
+    AnnotationDbi,
+    S4Vectors,
+    DelayedArray,
+    DelayedMatrixStats
+Suggests:
+    testthat,
+    knitr,
+    rmarkdown,
+    BiocStyle,
+biocViews: 
+    Software,
+    SingleCell, 
+    GeneExpression, 
+    Transcriptomics, 
+    Classification, 
+    Clustering,
+    Annotation
+VignetteBuilder: knitr
+Encoding: UTF-8
+URL: https://github.com/LTLA/CellTypeReferences
+BugReports: https://support.bioconductor.org/
