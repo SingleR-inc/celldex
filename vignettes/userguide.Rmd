@@ -31,10 +31,16 @@ library(BiocStyle)
 The `r Biocpkg("CellTypeReferences")` package provides convenient access to several cell type reference datasets. 
 Most of these references are derived from bulk RNA-seq or microarray data of cell populations
 that (hopefully) consist of a pure cell type after sorting and/or culturing.
+The aim is to provide a common resource for further analysis like cell type annotation of single cell expression data
+or deconvolution of cell type proportions in bulk expression datasets.
+
 Each dataset contains a log-normalized expression matrix that is intended to be comparable 
-to log-UMI counts from common single-cell protocols [@aran2019reference],
-typcially after adjusting bulk RNA-seq data for differences in gene length.
-It also provides three levels of cell type annotation in its column metadata:
+to log-UMI counts from common single-cell protocols [@aran2019reference]
+or gene length-adjusted values from bulk datasets.
+By default, gene annotation is returned in terms of gene symbols,
+but they can be coerced to Ensembl annotation with `ensembl=TRUE` for more robust cross-referencing across studies.
+
+In general, each reference provides three levels of cell type annotation in its column metadata:
 
 - `label.main`, broad annotation that defines the major cell types.
 This has few unique levels that allows for fast annotation but at low resolution.
@@ -43,8 +49,6 @@ This has more unique levels that results in slower annotation but at much higher
 - `label.ont`, fine-grained annotation mapped to the standard vocabulary in the [Cell Ontology](https://www.ebi.ac.uk/ols/ontologies/cl).
 This enables synchronization of labels across references as well as dynamic adjustment of the resolution.
 
-By default, gene annotation is returned in terms of gene symbols,
-but they can be coerced to Ensembl annotation with `ensembl=TRUE` for more robust cross-referencing across studies.
 More details for each dataset can be viewed on the corresponding help page for its retrieval function (e.g., `?ImmGenData`).
 
 # General-purpose references
