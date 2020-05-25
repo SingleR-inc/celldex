@@ -1,3 +1,3 @@
 library(testthat)
-library(CellTypeReferences)
-test_check("CellTypeReferences")
+library(celldex)
+test_check("celldex")

@@ -95,8 +95,9 @@
 #' @importFrom utils read.delim
 .add_ontology <- function(se, fname, mode) {
     if (mode!="none") {
-        src <- read.delim(system.file("mapping", paste0(fname, ".tsv"), 
-            package="CellTypeReferences", mustWork=TRUE), header=FALSE, stringsAsFactors=FALSE)
+        path <- system.file("mapping", paste0(fname, ".tsv"), package="celldex", mustWork=TRUE)
+        src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
         m <- match(se$label.fine, src[,1])
         stopifnot(all(!is.na(m))) # sanity check
 

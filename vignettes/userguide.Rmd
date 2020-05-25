@@ -1,5 +1,5 @@
 ---
-title: Cell type references datasets
+title: Pokédex for Cell Types
 author:
 - name: Aaron Lun
   email: infinite.monkeys.with.keyboards@gmail.com
@@ -13,10 +13,10 @@ date: "Revised: May 15th, 2020"
 output:
   BiocStyle::html_document:
     toc_float: true
-package: CellTypeReferences
+package: celldex
 bibliography: ref.bib
 vignette: >
-  %\VignetteIndexEntry{Available references}
+  %\VignetteIndexEntry{Cell type references}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,7 +28,7 @@ library(BiocStyle)
 
 # Overview
 
-The `r Biocpkg("CellTypeReferences")` package provides convenient access to several cell type reference datasets. 
+The `r Biocpkg("celldex")` package provides convenient access to several cell type reference datasets. 
 Most of these references are derived from bulk RNA-seq or microarray data of cell populations
 that (hopefully) consist of a pure cell type after sorting and/or culturing.
 The aim is to provide a common resource for further analysis like cell type annotation of single cell expression data
@@ -59,7 +59,7 @@ The HPCA reference consists of publicly available microarray datasets derived fr
 Most of the labels refer to blood subpopulations but cell types from other tissues are also available.
 
 ```{r}
-library(CellTypeReferences)
+library(celldex)
 ref <- HumanPrimaryCellAtlasData()
 ```
 
