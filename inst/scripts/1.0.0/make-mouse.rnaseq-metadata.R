@@ -2,7 +2,7 @@ df <- data.frame(
     Title = sprintf("Mouse bulk RNA-seq %s", c("logcounts", "colData")), 
     Description = sprintf("%s 358 bulk RNA-seq samples of sorted cell types collected from GEO", 
         c("Matrix of log-normalized expression values from", "Per-sample metadata containing cell type labels of")),
-    RDataPath = file.path("SingleR", "mouse.rnaseq","1.0.0", c("logcounts.rds", "coldata.rds")),
+    RDataPath = file.path("celldex", "mouse.rnaseq","1.0.0", c("logcounts.rds", "coldata.rds")),
     BiocVersion="3.10",
     Genome=NA, 
     SourceType="RDA", 
@@ -18,4 +18,4 @@ df <- data.frame(
     stringsAsFactors = FALSE
 )
 
-write.csv(file="../extdata/1.0.0/metadata-mouse.rnaseq.csv", df, row.names=FALSE)
+write.csv(file="../../extdata/1.0.0/metadata-mouse.rnaseq.csv", df, row.names=FALSE)

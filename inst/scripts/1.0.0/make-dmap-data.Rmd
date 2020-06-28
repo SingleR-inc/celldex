@@ -135,7 +135,7 @@ coldata <- DataFrame(row.names = colnames(logcounts),
 Now the counts and metadata can be saved for upload to `r Biocpkg("ExperimentHub")`.
 
 ```{r save_for_ExpHub}
-path <- file.path("SingleR", "dmap", "1.0.0")
+path <- file.path("celldex", "dmap", "1.0.0")
 dir.create(path, showWarnings = FALSE, recursive = TRUE)
 saveRDS(logcounts, file = file.path(path, "logcounts.rds"))
 saveRDS(coldata, file = file.path(path, "coldata.rds"))

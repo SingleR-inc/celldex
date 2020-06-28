@@ -63,7 +63,7 @@ coldata <- DataFrame(row.names = colnames(logcounts),
 Saving counts and metadata to upload them to `r Biocpkg("ExperimentHub")`.
 
 ```{r save_for_ExpHub}
-path <- file.path("SingleR", dataset, "1.0.0")
+path <- file.path("celldex", dataset, "1.0.0")
 dir.create(path, showWarnings = FALSE, recursive = TRUE)
 
 ## saving counts

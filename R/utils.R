@@ -6,7 +6,7 @@
     rm.NA = c("rows","cols","both","none"), has.rowdata=FALSE, has.coldata=TRUE) 
 {
     rm.NA <- match.arg(rm.NA)
-    host <- file.path("SingleR", dataset)
+    host <- file.path("celldex", dataset)
 
     ## extract normalized values --------
     all.assays <- list()

@@ -2,7 +2,7 @@ df <- data.frame(
     Title = sprintf("Human Primary Cell Atlas %s", c("logcounts", "colData")), 
     Description = sprintf("%s human primary cell atlas data with 38 main cell types (169 subtypes)", 
         c("Matrix of log-normalized expression values from the", "Per-sample metadata containing cell type labels of")),
-    RDataPath = file.path("SingleR", "hpca","1.0.0", c("logcounts.rds", "coldata.rds")),
+    RDataPath = file.path("celldex", "hpca","1.0.0", c("logcounts.rds", "coldata.rds")),
     BiocVersion="3.10", 
     Genome=NA,
     SourceType="RDA", 
@@ -18,5 +18,4 @@ df <- data.frame(
     stringsAsFactors = FALSE
 )
 
-write.csv(file="../extdata/1.0.0/metadata-hpca.csv", df, row.names=FALSE)
-
+write.csv(file="../../extdata/1.0.0/metadata-hpca.csv", df, row.names=FALSE)

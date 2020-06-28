@@ -141,7 +141,7 @@ coldata$label.fine <- sub("ï", "i", coldata$label.fine)
 Now the counts and metadata can be saved for upload to `r Biocpkg("ExperimentHub")`.
 
 ```{r save_for_ExpHub}
-path <- file.path("SingleR", "dmap", "1.2.0")
+path <- file.path("celldex", "dmap", "1.2.0")
 dir.create(path, showWarnings = FALSE, recursive = TRUE)
 
 ## Saving counts (disabled, as this is the same as 1.0.0).
