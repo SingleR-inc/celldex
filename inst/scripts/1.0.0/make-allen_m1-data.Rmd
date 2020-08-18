@@ -1,0 +1,84 @@
+---
+title: "Obtaining reference data from Allen Brain Map - Human M1"
+author: 
+- name: Jared M. Andrews
+  affiliation: St. Jude Children's Research Hospital, Memphis, TN, USA
+date: "August 17th, 2020"
+output: 
+  BiocStyle::html_document
+---
+
+```{r setup, echo=FALSE, include=FALSE}
+library(BiocStyle)
+knitr::opts_chunk$set(error=FALSE, message=FALSE, warning=FALSE)
+```
+
+# Overview
+
+This RNA-seq dataset was downloaded from the [Allen Brain Map](https://portal.brain-map.org/atlases-and-data/rnaseq/human-m1-10x).
+Expression values were aggregated per cell type from 76533 total nuclei derived from 2 post-mortem human brain specimens using the 10X 3' v3 protocol. The expression values were calculated as trimmed means (25-75th percentile) for each of the 127 cell types. This data appears to already be log-normalized.
+
+Main and fine labels were manually assigned to each sample based on cell type as specified in the GEO repository.
+
+## Data retrieval and processing
+
+First, we'll download the expression values.
+
+```{r retrieve_from_geo}
+library(BiocFileCache)
+url <- "https://idk-etl-prod-download-bucket.s3.amazonaws.com/aibs_human_m1_10x/trimmed_means.csv"
+bfc <- BiocFileCache(ask=FALSE)
+ref <- bfcrpath(bfc, url)
+mat <- t(as.matrix(read.csv(ref, check.names=FALSE, header = TRUE, row.names = 1)))
+dim(mat)
+```
+
+Genes with no reads in any samples don't provide any value for our purposes, so we will remove those. 
+
+```{r drop_no_read_rows}
+mat <- mat[rowSums(mat) != 0, ]
+dim(mat)
+```
+
+## Sample labelling
+
+We can now apply the human-readable labels to each sample.
+This requires a small amount of interpretation for the "main" labels.
+
+```{r create_metadata}
+fine <- colnames(mat)
+main <- fine
+
+main[startsWith(main, "Inh")] <- "Inhibitory Neurons"
+main[startsWith(main, "Exc")] <- "Excitatory Neurons"
+main[startsWith(main, "Astro")] <- "Astrocytes"
+main[startsWith(main, "Endo")] <- "Endothelial Cells"
+main[startsWith(main, "Micro")] <- "Microglial Cells"
+main[startsWith(main, "Oligo")] <- "Oligodendrocytes"
+main[startsWith(main, "OPC")] <- "Oligodendrocyte Progenitor Cells"
+main[startsWith(main, "VLMC")] <- "Vascular and Leptomeningeal Cells"
+
+stopifnot(all(!is.na(main)))
+
+library(S4Vectors)
+coldata <- DataFrame(row.names = colnames(mat),
+    label.main = main, label.fine = fine)
+```
+
+## Saving to file
+
+Now the counts and metadata can be saved for upload to `r Biocpkg("ExperimentHub")`.
+
+```{r save_for_ExpHub}
+path <- file.path("celldex", "allen_m1", "1.0.0")
+dir.create(path, showWarnings = FALSE, recursive = TRUE)
+
+saveRDS(mat, file = file.path(path, "logcounts.rds"))
+saveRDS(coldata, file = file.path(path, "coldata.rds"))
+```
+
+## Session info
+
+```{r}
+sessionInfo()
+```
