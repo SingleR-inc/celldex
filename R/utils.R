@@ -2,7 +2,7 @@
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom SummarizedExperiment rowData
 #' @importFrom S4Vectors DataFrame
-.create_se <- function(dataset, version, hub = ExperimentHub(), assays="logcounts",
+.create_se <- function(dataset, version, hub = .ExperimentHub(), assays="logcounts",
     rm.NA = c("rows","cols","both","none"), has.rowdata=FALSE, has.coldata=TRUE) 
 {
     rm.NA <- match.arg(rm.NA)
@@ -79,7 +79,7 @@
             tag <- "AH73881"
         }
 
-        edb <- AnnotationHub()[[tag]]
+        edb <- .AnnotationHub()[[tag]]
         ensid <- mapIds(edb, keys=rownames(se), keytype="SYMBOL", column="GENEID")
 
         keep <- !is.na(ensid) & !duplicated(ensid)
@@ -111,4 +111,16 @@
     }
 
     se
+}
+
+#' @importFrom ExperimentHub ExperimentHub
+.ExperimentHub <- function() {
+    .move_cache("ExperimentHub", "EXPERIMENT_HUB_CACHE")
+    ExperimentHub()
+}
+
+#' @importFrom AnnotationHub AnnotationHub
+.AnnotationHub <- function() {
+    .move_cache("AnnotationHub", "ANNOTATION_HUB_CACHE")
+    AnnotationHub()
 }
