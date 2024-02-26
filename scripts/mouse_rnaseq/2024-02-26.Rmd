@@ -9,7 +9,7 @@ Pulling assets from ExperimentHub.
 ```{r}
 library(ExperimentHub)
 hub <- ExperimentHub()
-prefix <- "celldex/mouse_rnaseq/"
+prefix <- "celldex/mouse.rnaseq/"
 norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
 stopifnot(nrow(norm.hub) == 1L)
 norm <- norm.hub[[1]]
@@ -23,7 +23,7 @@ coldata
 Attaching ontology mappings.
 
 ```{r}
-path <- system.file("mapping", "mouse_rnaseq", package="celldex", mustWork=TRUE)
+path <- system.file("mapping", "mouse_rnaseq.tsv", package="celldex", mustWork=TRUE)
 src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
 
 m <- match(coldata$label.fine, src[,1])
@@ -66,10 +66,10 @@ meta <- list(
         "These were resolved further into 28 subtypes (`label.fine`), which have also been mapped to the Cell Ontology (`label.ont`)."
     ), collapse="\n"),
     taxonomy_id="10090",
-    genome="GRCm37",
+    genome="MGSCv37",
     sources=list(
         list(provider="PubMed", id="30858345"),
-        list(provider="url", id="https://github.com/BenayounLaboratory/Mouse_Aging_Epigenomics_2018/tree/master/FigureS7_CIBERSORT/RNAseq_datasets_for_Deconvolution/2017-01-18"),
+        list(provider="URL", id="https://github.com/BenayounLaboratory/Mouse_Aging_Epigenomics_2018/tree/master/FigureS7_CIBERSORT/RNAseq_datasets_for_Deconvolution/2017-01-18"),
         list(provider="PubMed", id="30643263"),
         list(provider="GitHub", id="dviraran/SingleR", version="adc4a0e4d5cfa79db18f3821f51a02cbd6484710"),
         list(provider="ExperimentHub", id=norm.hub$ah_id),
