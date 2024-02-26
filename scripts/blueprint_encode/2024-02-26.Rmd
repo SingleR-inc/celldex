@@ -76,5 +76,5 @@ Saving it to disk.
 ```{r}
 library(celldex)
 path <- "2024-02-26_output"
-saveDataset(norm, coldata, path, meta)
+saveReference(norm, coldata, path, meta)
 ```

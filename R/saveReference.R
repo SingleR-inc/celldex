@@ -45,7 +45,7 @@
 #' 
 #' # Actually saving it.
 #' tmp <- tempfile()
-#' saveDataset(x, labels, tmp, meta)
+#' saveReference(x, labels, tmp, meta)
 #'
 #' # Reloading it to make sure it looks good.
 #' alabaster.base::readObject(tmp)
@@ -54,7 +54,7 @@
 #' @seealso
 #' \code{\link{uploadDirectory}}, to upload the saved dataset to the gypsum backend.
 #'
-#' \code{\link{fetchDataset}}, to download an existing dataset into the current sesssion.
+#' \code{\link{fetchReference}}, to download an existing dataset into the current sesssion.
 #'
 #' @export
 #' @importFrom alabaster.base saveObject
@@ -63,7 +63,7 @@
 #' @importFrom SummarizedExperiment SummarizedExperiment assay<-
 #' @importFrom gypsum fetchMetadataSchema validateMetadata
 #' @importFrom jsonlite toJSON 
-saveDataset <- function(x, labels, path, metadata) {
+saveReference <- function(x, labels, path, metadata) {
     schema <- fetchMetadataSchema()
     if (is.null(metadata$bioconductor_version)) {
         metadata$bioconductor_version <- as.character(BiocManager::version())
