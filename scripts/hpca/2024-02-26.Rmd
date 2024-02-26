@@ -1,0 +1,69 @@
+# From ExperimentHub to gypsum
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, message=FALSE)
+```
+
+Pulling assets from ExperimentHub.
+
+```{r}
+library(ExperimentHub)
+hub <- ExperimentHub()
+prefix <- "celldex/hpca/"
+norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
+stopifnot(nrow(norm.hub) == 1L)
+norm <- norm.hub[[1]]
+str(norm)
+coldata.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/coldata.rds")]
+stopifnot(nrow(coldata.hub) == 1L)
+coldata <- coldata.hub[[1]]
+coldata
+```
+
+Attaching ontology mappings.
+
+```{r}
+path <- system.file("mapping", "hpca.tsv", package="celldex", mustWork=TRUE)
+src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
+m <- match(coldata$label.fine, src[,1])
+stopifnot(all(!is.na(m))) # sanity check
+
+matched <- src[m, 2]
+matched[matched==""] <- NA_character_
+coldata$label.ont <- matched
+coldata
+```
+
+Assembling some metadata.
+
+```{r}
+meta <- list(
+    title="Microarray data from the Human Primary Cell Atlas",
+    description=paste(c(
+        "Log-normalized expression values for 713 microarray samples from the Human Primary Cell Atlas (HPCA) (Mabbott et al., 2013).",
+        "These 713 samples were processed and normalized as described in Aran, Looney and Liu et al. (2019).",
+        "Each sample was assigned to one of 37 main cell types (`label.main`) and 157 subtypes (`label.fine`).",
+        "The subtypes have also been mapped to the Cell Ontology (`label.ont`)."
+    ), collapse="\n"),
+    taxonomy_id="9606",
+    genome=character(0), # dunno, it doesn't say.
+    sources=list(
+        list(provider="PubMed", id="24053356"),
+        list(provider="PubMed", id="30643263"),
+        list(provider="GitHub", id="dviraran/SingleR", version="adc4a0e4d5cfa79db18f3821f51a02cbd6484710"),
+        list(provider="ExperimentHub", id=norm.hub$ah_id),
+        list(provider="ExperimentHub", id=coldata.hub$ah_id)
+    ),
+    maintainer_name="Friederike Dündar",
+    maintainer_email="frd2007@med.cornell.edu"
+)
+```
+
+Saving it to disk.
+
+```{r}
+library(celldex)
+path <- "2024-02-26_output"
+saveDataset(norm, coldata, path, meta)
+```

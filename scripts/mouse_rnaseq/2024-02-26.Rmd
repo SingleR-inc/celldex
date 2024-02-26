@@ -1,0 +1,89 @@
+# From ExperimentHub to gypsum
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, message=FALSE)
+```
+
+Pulling assets from ExperimentHub.
+
+```{r}
+library(ExperimentHub)
+hub <- ExperimentHub()
+prefix <- "celldex/mouse_rnaseq/"
+norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
+stopifnot(nrow(norm.hub) == 1L)
+norm <- norm.hub[[1]]
+str(norm)
+coldata.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/coldata.rds")]
+stopifnot(nrow(coldata.hub) == 1L)
+coldata <- coldata.hub[[1]]
+coldata
+```
+
+Attaching ontology mappings.
+
+```{r}
+path <- system.file("mapping", "mouse_rnaseq", package="celldex", mustWork=TRUE)
+src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
+m <- match(coldata$label.fine, src[,1])
+stopifnot(all(!is.na(m))) # sanity check
+
+matched <- src[m, 2]
+matched[matched==""] <- NA_character_
+coldata$label.ont <- matched
+coldata
+```
+
+Assembling some metadata.
+
+```{r}
+meta <- list(
+    title="Bulk RNA-seq data of sorted mouse cell populations",
+    description=paste(c(
+        "Log-normalized expression values of 358 bulk RNA-seq samples of sorted cell populations in GEO.",
+        "This dataset was contributed by the Benayoun Lab, who identified, downloaded and processed data sets on GEO corresponding to sorted cell types (Benayoun et al., 2019).",
+        "Samples were annotated to 18 main cell types (`label.main`):",
+        "- Adipocytes",
+        "- Astrocytes",
+        "- B cells ",
+        "- Cardiomyocytes",
+        "- Dendritic cells",
+        "- Endothelial cells",
+        "- Epithelial cells",
+        "- Erythrocytes",
+        "- Fibroblasts",
+        "- Granulocytes",
+        "- Hepatocytes",
+        "- Macrophages",
+        "- Microglia",
+        "- Monocytes",
+        "- Neurons",
+        "- NK cells",
+        "- Oligodendrocytes",
+        "- T cells",
+        "",
+        "These were resolved further into 28 subtypes (`label.fine`), which have also been mapped to the Cell Ontology (`label.ont`)."
+    ), collapse="\n"),
+    taxonomy_id="10090",
+    genome="GRCm37",
+    sources=list(
+        list(provider="PubMed", id="30858345"),
+        list(provider="url", id="https://github.com/BenayounLaboratory/Mouse_Aging_Epigenomics_2018/tree/master/FigureS7_CIBERSORT/RNAseq_datasets_for_Deconvolution/2017-01-18"),
+        list(provider="PubMed", id="30643263"),
+        list(provider="GitHub", id="dviraran/SingleR", version="adc4a0e4d5cfa79db18f3821f51a02cbd6484710"),
+        list(provider="ExperimentHub", id=norm.hub$ah_id),
+        list(provider="ExperimentHub", id=coldata.hub$ah_id)
+    ),
+    maintainer_name="Friederike Dündar",
+    maintainer_email="frd2007@med.cornell.edu"
+)
+```
+
+Saving it to disk.
+
+```{r}
+library(celldex)
+path <- "2024-02-26_output"
+saveDataset(norm, coldata, path, meta)
+```
