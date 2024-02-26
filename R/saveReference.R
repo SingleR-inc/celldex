@@ -1,6 +1,6 @@
-#' Save a dataset to disk
+#' Save a reference dataset 
 #'
-#' Save a dataset to disk, usually in preparation for upload via \code{\link{uploadDirectory}}.
+#' Save a reference dataset to disk, usually in preparation for upload via \code{\link{uploadDirectory}}.
 #'
 #' @param x Matrix of log-normalized expression values.
 #' This may be sparse or dense, but should be non-integer and have no missing values.
@@ -9,14 +9,21 @@
 #' Each row of \code{labels} corresponds to a column of \code{x} and contains the label(s) for that column.
 #' Each column of \code{labels} represents a different label type;
 #' typically, the column name has a \code{label.} prefix to distinguish between, e.g., \code{label.fine}, \code{label.broad} and so on.
-#' @param path String containing the path to a new directory in which save the dataset.
-#' @param metadata Named list containing metadata for this dataset,
+#' At least one column should be present.
+#' @param path String containing the path to a directory in which to save \code{x}.
+#' @param metadata Named list containing metadata for this reference dataset,
 #' see the schema returned by \code{\link{fetchMetadataSchema}()}.
 #' Note that the \code{applications.takane} property will be automatically added by this function and does not have to be supplied.
 #'
 #' @return \code{x} and \code{labels} are used to create a \linkS4class{SummarizedExperiment} that is saved into \code{path}.
 #' \code{NULL} is invisibly returned.
 #'
+#' @details
+#' The SummarizedExperiment saved to \code{path} is guaranteed to have the \code{"logcounts"} assay and at least one column in \code{labels}.
+#' This mirrors the expectation for reference datasets obtained via \code{\link{fetchReference}}.
+#'
+#' @details
+#' 
 #' @author Aaron Lun
 #' @examples
 #' # Mocking up some data to be saved.
@@ -73,6 +80,9 @@ saveReference <- function(x, labels, path, metadata) {
     validateMetadata(metadata, schema) # First validation for user-supplied content.
 
     # Check that all labels are categorical.
+    if (ncol(labels) == 0L) {
+        stop("'labels' should contain at least one column")
+    }
     for (cn in colnames(labels)) {
         if (!is.character(labels[[cn]])) {
             stop("all columns of 'labels' should be character vectors")

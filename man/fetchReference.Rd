@@ -3,7 +3,7 @@
 \name{fetchReference}
 \alias{fetchReference}
 \alias{fetchMetadata}
-\title{Fetch a dataset from the gypsum backend}
+\title{Fetch a reference dataset}
 \usage{
 fetchReference(
   name,
@@ -21,17 +21,17 @@ fetchMetadata(
   name,
   version,
   path = NA,
-  package = "scRNAseq",
+  package = "celldex",
   cache = cacheDirectory(),
   overwrite = FALSE
 )
 }
 \arguments{
-\item{name}{String containing the name of the dataset.}
+\item{name}{String containing the name of the reference dataset.}
 
 \item{version}{String containing the version of the dataset.}
 
-\item{path}{String containing the path to a subdataset, if \code{name} contains multiple datasets.
+\item{path}{String containing the path to a subdataset, if \code{name} contains multiple reference datasets.
 Defaults to \code{NA} if no subdatasets are present.}
 
 \item{package}{String containing the name of the package.}
@@ -49,7 +49,7 @@ Dense and sparse \linkS4class{ReloadedArray} objects are converted into ordinary
 \code{fetchMetadata} returns a named list of metadata for the specified dataset.
 }
 \description{
-Fetch a dataset (or its metadata) from the gypsum backend.
+Fetch a reference dataset (or its metadata) from the gypsum backend.
 }
 \examples{
 fetchReference("immgen", "2024-02-26")

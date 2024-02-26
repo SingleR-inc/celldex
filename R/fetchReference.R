@@ -1,10 +1,10 @@
-#' Fetch a dataset from the gypsum backend
+#' Fetch a reference dataset 
 #'
-#' Fetch a dataset (or its metadata) from the gypsum backend.
+#' Fetch a reference dataset (or its metadata) from the gypsum backend.
 #'
-#' @param name String containing the name of the dataset.
+#' @param name String containing the name of the reference dataset.
 #' @param version String containing the version of the dataset.
-#' @param path String containing the path to a subdataset, if \code{name} contains multiple datasets.
+#' @param path String containing the path to a subdataset, if \code{name} contains multiple reference datasets.
 #' Defaults to \code{NA} if no subdatasets are present.
 #' @param package String containing the name of the package.
 #' @param cache,overwrite Arguments to pass to \code{\link[gypsum]{saveVersion}} or \code{\link[gypsum]{saveFile}}.
@@ -13,6 +13,8 @@
 #' @param ... Further arguments to pass to \code{\link{readObject}}.
 #'
 #' @return \code{fetchReference} returns the dataset as a \linkS4class{SummarizedExperiment}.
+#' This is guaranteed to have a \code{"logcounts"} assay with log-normalized expression values,
+#' along with at least one character vector of labels in the column data.
 #'
 #' \code{fetchMetadata} returns a named list of metadata for the specified dataset.
 #'
@@ -40,14 +42,14 @@ fetchReference <- function(name, version, path=NA, package="celldex", cache=cach
 
     old <- altReadObjectFunction(cdLoadObject)
     on.exit(altReadObjectFunction(old))
-    altReadObject(obj_path, scRNAseq.realize.assays=realize.assays, scRNAseq.realize.reduced.dims=realize.reduced.dims, ...)
+    altReadObject(obj_path, celldex.realize.assays=realize.assays, ...)
 }
 
 #' @export
 #' @rdname fetchReference
 #' @importFrom jsonlite fromJSON
 #' @importFrom gypsum cacheDirectory saveFile
-fetchMetadata <- function(name, version, path=NA, package="scRNAseq", cache=cacheDirectory(), overwrite=FALSE) {
+fetchMetadata <- function(name, version, path=NA, package="celldex", cache=cacheDirectory(), overwrite=FALSE) {
     remote_path <- "_bioconductor.json"
     if (!is.na(path)) {
         remote_path <- paste0(path, "/", remote_path)

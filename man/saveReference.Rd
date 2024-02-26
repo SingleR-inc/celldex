@@ -2,7 +2,7 @@
 % Please edit documentation in R/saveReference.R
 \name{saveReference}
 \alias{saveReference}
-\title{Save a dataset to disk}
+\title{Save a reference dataset}
 \usage{
 saveReference(x, labels, path, metadata)
 }
@@ -16,9 +16,9 @@ Each row of \code{labels} corresponds to a column of \code{x} and contains the l
 Each column of \code{labels} represents a different label type;
 typically, the column name has a \code{label.} prefix to distinguish between, e.g., \code{label.fine}, \code{label.broad} and so on.}
 
-\item{path}{String containing the path to a new directory in which save the dataset.}
+\item{path}{String containing the path to a directory in which to save \code{x}.}
 
-\item{metadata}{Named list containing metadata for this dataset,
+\item{metadata}{Named list containing metadata for this reference dataset,
 see the schema returned by \code{\link{fetchMetadataSchema}()}.
 Note that the \code{applications.takane} property will be automatically added by this function and does not have to be supplied.}
 }
@@ -27,7 +27,7 @@ Note that the \code{applications.takane} property will be automatically added by
 \code{NULL} is invisibly returned.
 }
 \description{
-Save a dataset to disk, usually in preparation for upload via \code{\link{uploadDirectory}}.
+Save a reference dataset to disk, usually in preparation for upload via \code{\link{uploadDirectory}}.
 }
 \examples{
 # Mocking up some data to be saved.
