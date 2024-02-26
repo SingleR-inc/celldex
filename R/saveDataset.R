@@ -51,6 +51,11 @@
 #' alabaster.base::readObject(tmp)
 #' str(jsonlite::fromJSON(file.path(tmp, "_bioconductor.json")))
 #'
+#' @seealso
+#' \code{\link{uploadDirectory}}, to upload the saved dataset to the gypsum backend.
+#'
+#' \code{\link{fetchDataset}}, to download an existing dataset into the current sesssion.
+#'
 #' @export
 #' @importFrom alabaster.base saveObject
 #' @importMethodsFrom alabaster.se saveObject
