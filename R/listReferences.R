@@ -25,13 +25,13 @@ listReferences <- function() {
 }
 
 #' @export
-#' @rdname listVersions
+#' @rdname listReferences
 listVersions <- function(name) {
     gypsum::listVersions("celldex", name)
 }
 
 #' @export
-#' @rdname listVersions
+#' @rdname listReferences
 #' @importFrom gypsum fetchLatest
 fetchLatestVersion <- function(name) {
     fetchLatest("celldex", name)

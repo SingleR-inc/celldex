@@ -2,9 +2,15 @@
 % Please edit documentation in R/listReferences.R
 \name{listReferences}
 \alias{listReferences}
+\alias{listVersions}
+\alias{fetchLatestVersion}
 \title{List available references}
 \usage{
 listReferences()
+
+listVersions(name)
+
+fetchLatestVersion(name)
 }
 \arguments{
 \item{name}{String containing the name of the reference dataset.}

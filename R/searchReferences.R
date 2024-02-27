@@ -58,4 +58,5 @@ searchReferences <- function(query, cache=cacheDirectory(), overwrite=FALSE, lat
 }
 
 #' @export
+#' @importFrom gypsum defineTextQuery
 gypsum::defineTextQuery

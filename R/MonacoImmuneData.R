@@ -72,14 +72,18 @@
 #' ref.se <- MonacoImmuneData()
 #' 
 #' @export
-MonacoImmuneData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none")) {
-    version <- "1.0.0"
-    se <- .create_se("monaco_immune", version, 
-        assays="logcounts", rm.NA = "none",
-        has.rowdata = FALSE, has.coldata = TRUE)
+MonacoImmuneData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none"), legacy=FALSE) {
+    cell.ont <- match.arg(cell.ont)
 
-    se <- .convert_to_ensembl(se, "Hs", ensembl)
-    se <- .add_ontology(se, "monaco", match.arg(cell.ont))
+    if (!legacy && cell.ont == "all") {
+        se <- fetchReference("monaco", "2024-02-26", realize.assays=TRUE)
+    } else {
+        version <- "1.0.0"
+        se <- .create_se("monaco_immune", version, 
+            assays="logcounts", rm.NA = "none",
+            has.rowdata = FALSE, has.coldata = TRUE)
+        se <- .add_ontology(se, "monaco", cell.ont)
+    }
 
-    se
+    .convert_to_ensembl(se, "Hs", ensembl)
 }

@@ -22,8 +22,6 @@
 #' The SummarizedExperiment saved to \code{path} is guaranteed to have the \code{"logcounts"} assay and at least one column in \code{labels}.
 #' This mirrors the expectation for reference datasets obtained via \code{\link{fetchReference}}.
 #'
-#' @details
-#' 
 #' @author Aaron Lun
 #' @examples
 #' # Mocking up some data to be saved.

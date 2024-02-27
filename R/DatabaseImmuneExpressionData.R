@@ -58,14 +58,18 @@
 #' ref.se <- DatabaseImmuneCellExpressionData()
 #' 
 #' @export
-DatabaseImmuneCellExpressionData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none")) {
-    version <- "1.0.0"
-    se <- .create_se("dice", version, 
-        assays="logcounts", rm.NA = "none",
-        has.rowdata = FALSE, has.coldata = TRUE)
+DatabaseImmuneCellExpressionData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none"), legacy=FALSE) {
+    cell.ont <- match.arg(cell.ont)
 
-    se <- .convert_to_ensembl(se, "Hs", ensembl)
-    se <- .add_ontology(se, "dice", match.arg(cell.ont))
+    if (!legacy && cell.ont == "all") {
+        se <- fetchReference("dice", "2024-02-26", realize.assays=TRUE)
+    } else {
+        version <- "1.0.0"
+        se <- .create_se("dice", version, 
+            assays="logcounts", rm.NA = "none",
+            has.rowdata = FALSE, has.coldata = TRUE)
+        se <- .add_ontology(se, "dice", match.arg(cell.ont))
+    }
 
-    se
+    .convert_to_ensembl(se, "Hs", ensembl)
 }

@@ -28,6 +28,7 @@
 #' @author Aaron Lun
 #' @examples
 #' fetchReference("immgen", "2024-02-26")
+#' str(fetchMetadata("immgen", "2024-02-26"))
 #'
 #' @export
 #' @importFrom gypsum cacheDirectory saveVersion

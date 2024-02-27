@@ -45,6 +45,8 @@ Dense and sparse \linkS4class{ReloadedArray} objects are converted into ordinary
 }
 \value{
 \code{fetchReference} returns the dataset as a \linkS4class{SummarizedExperiment}.
+This is guaranteed to have a \code{"logcounts"} assay with log-normalized expression values,
+along with at least one character vector of labels in the column data.
 
 \code{fetchMetadata} returns a named list of metadata for the specified dataset.
 }
@@ -53,6 +55,7 @@ Fetch a reference dataset (or its metadata) from the gypsum backend.
 }
 \examples{
 fetchReference("immgen", "2024-02-26")
+str(fetchMetadata("immgen", "2024-02-26"))
 
 }
 \seealso{
