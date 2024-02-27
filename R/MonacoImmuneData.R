@@ -76,7 +76,7 @@ MonacoImmuneData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none"), 
     cell.ont <- match.arg(cell.ont)
 
     if (!legacy && cell.ont == "all") {
-        se <- fetchReference("monaco", "2024-02-26", realize.assays=TRUE)
+        se <- fetchReference("monaco_immune", "2024-02-26", realize.assays=TRUE)
     } else {
         version <- "1.0.0"
         se <- .create_se("monaco_immune", version, 

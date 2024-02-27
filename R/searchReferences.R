@@ -43,7 +43,7 @@ searchReferences <- function(query, cache=cacheDirectory(), overwrite=FALSE, lat
     if (!latest) {
         stmt <- paste0(stmt, ", versions.latest AS latest")
     }
-    stmt <- paste0(stmt, " FROM paths LEFT JOIN versions ON paths.vid = versions.vid WHERE versions.project = 'scRNAseq'")
+    stmt <- paste0(stmt, " FROM paths LEFT JOIN versions ON paths.vid = versions.vid WHERE versions.project = 'celldex'")
     if (latest) {
         stmt <- paste0(stmt, " AND versions.latest = 1")
     }
