@@ -1,4 +1,4 @@
-# Reference datasets of cell types for Bioconductor
+# Index of reference cell type datasets for Bioconductor
 
 |Environment|Status|
 |---|---|
