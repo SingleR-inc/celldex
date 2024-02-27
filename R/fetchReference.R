@@ -62,7 +62,7 @@ fetchMetadata <- function(name, version, path=NA, package="celldex", cache=cache
 
 #' @import methods
 #' @importFrom alabaster.base readObjectFile readObject
-#' @importFrom SummarizedExperiment assay assay<-
+#' @importFrom SummarizedExperiment assay assay<- assayNames
 cdLoadObject <- function(path, metadata=NULL, celldex.realize.assays=FALSE, ...) {
     if (is.null(metadata)) {
         metadata <- readObjectFile(path)

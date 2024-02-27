@@ -13,7 +13,6 @@ fetchReference(
   cache = cacheDirectory(),
   overwrite = FALSE,
   realize.assays = FALSE,
-  realize.reduced.dims = TRUE,
   ...
 )
 

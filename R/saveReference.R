@@ -65,7 +65,7 @@
 #' @importFrom alabaster.base saveObject
 #' @importMethodsFrom alabaster.se saveObject
 #' @importFrom DelayedArray type
-#' @importFrom SummarizedExperiment SummarizedExperiment assay<-
+#' @importFrom SummarizedExperiment SummarizedExperiment assay<- assayNames colData
 #' @importFrom gypsum fetchMetadataSchema validateMetadata
 #' @importFrom jsonlite toJSON 
 saveReference <- function(x, labels, path, metadata) {
