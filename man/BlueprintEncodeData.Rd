@@ -7,7 +7,8 @@
 BlueprintEncodeData(
   rm.NA = c("rows", "cols", "both", "none"),
   ensembl = FALSE,
-  cell.ont = c("all", "nonna", "none")
+  cell.ont = c("all", "nonna", "none"),
+  legacy = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ Genes without a mapping to a non-duplicated Ensembl ID are discarded.}
 If \code{"nonna"}, all samples without a valid term are discarded;
 if \code{"all"}, all samples are returned with (possibly \code{NA}) terms;
 if \code{"none"}, terms are not added.}
+
+\item{legacy}{Logical scalar indicating whether to pull data from ExperimentHub.
+By default, we use data from the gypsum backend.}
 }
 \value{
 A \linkS4class{SummarizedExperiment} object with a \code{"logcounts"} assay

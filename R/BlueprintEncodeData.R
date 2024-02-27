@@ -49,17 +49,19 @@
 #' ref.se <- BlueprintEncodeData(rm.NA = "rows")
 #'
 #' @export
-BlueprintEncodeData <- function(rm.NA = c("rows","cols","both","none"), 
-    ensembl=FALSE, cell.ont=c("all", "nonna", "none"))
-{
+BlueprintEncodeData <- function(rm.NA = c("rows","cols","both","none"), ensembl=FALSE, cell.ont=c("all", "nonna", "none"), legacy=FALSE) {
     rm.NA <- match.arg(rm.NA)
-    se <- .create_se("blueprint_encode", 
-        version = list(logcounts="1.0.0", coldata="1.2.0"),
-        assays="logcounts", rm.NA = rm.NA,
-        has.rowdata = FALSE, has.coldata = TRUE)
+    cell.ont <- match.arg(cell.ont)
 
-    se <- .convert_to_ensembl(se, "Hs", ensembl)
-    se <- .add_ontology(se, "blueprint_encode", match.arg(cell.ont))
+    if (!legacy && rm.NA == "rows" && cell.ont == "all") {
+        se <- fetchReference("blueprint_encode", "2024-02-26", realize.assays=TRUE)
+    } else {
+        se <- .create_se("blueprint_encode", 
+            version = list(logcounts="1.0.0", coldata="1.2.0"),
+            assays="logcounts", rm.NA = rm.NA,
+            has.rowdata = FALSE, has.coldata = TRUE)
+        se <- .add_ontology(se, "blueprint_encode", cell.ont)
+    }
 
-    se
+    .convert_to_ensembl(se, "Hs", ensembl)
 }

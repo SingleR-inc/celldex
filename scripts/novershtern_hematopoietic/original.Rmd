@@ -144,8 +144,8 @@ Now the counts and metadata can be saved for upload to `r Biocpkg("ExperimentHub
 path <- file.path("celldex", "dmap", "1.2.0")
 dir.create(path, showWarnings = FALSE, recursive = TRUE)
 
-## Saving counts (disabled, as this is the same as 1.0.0).
-## saveRDS(logcounts, file = file.path(path, "logcounts.rds"))
+## Saving counts
+saveRDS(logcounts, file = file.path(path, "logcounts.rds"))
 
 ## Saving the metadata.
 saveRDS(coldata, file = file.path(path, "coldata.rds"))

@@ -10,6 +10,8 @@
 #' If \code{"nonna"}, all samples without a valid term are discarded;
 #' if \code{"all"}, all samples are returned with (possibly \code{NA}) terms;
 #' if \code{"none"}, terms are not added.
+#' @param legacy Logical scalar indicating whether to pull data from ExperimentHub.
+#' By default, we use data from the gypsum backend.
 #'
 #' @details
 #' This function provides normalized expression values for 713 microarray samples from
@@ -43,14 +45,18 @@
 #'
 #' @export
 #' @importFrom SummarizedExperiment rowData
-HumanPrimaryCellAtlasData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none")) {
-    version <- "1.0.0"
-    se <- .create_se("hpca", version,
-        assays="logcounts", rm.NA = "none",
-        has.rowdata = FALSE, has.coldata = TRUE)
+HumanPrimaryCellAtlasData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none"), legacy=FALSE) {
+    cell.ont <- match.arg(cell.ont)
 
-    se <- .convert_to_ensembl(se, "Hs", ensembl)
-    se <- .add_ontology(se, "hpca", match.arg(cell.ont))
+    if (!legacy && cell.ont == "all") {
+        se <- fetchReference("hpca", "2024-02-26", realize.assays=TRUE)
+    } else {
+        version <- "1.0.0"
+        se <- .create_se("hpca", version,
+            assays="logcounts", rm.NA = "none",
+            has.rowdata = FALSE, has.coldata = TRUE)
+        se <- .add_ontology(se, "hpca", cell.ont)
+    }
 
-    se
+    .convert_to_ensembl(se, "Hs", ensembl)
 }

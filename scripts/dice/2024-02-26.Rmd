@@ -1,0 +1,92 @@
+# From ExperimentHub to gypsum
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, message=FALSE)
+```
+
+Pulling assets from ExperimentHub.
+
+```{r}
+library(ExperimentHub)
+hub <- ExperimentHub()
+prefix <- "celldex/dice/"
+norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
+stopifnot(nrow(norm.hub) == 1L)
+norm <- norm.hub[[1]]
+str(norm)
+coldata.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/coldata.rds")]
+stopifnot(nrow(coldata.hub) == 1L)
+coldata <- coldata.hub[[1]]
+coldata
+```
+
+Attaching ontology mappings.
+
+```{r}
+path <- system.file("mapping", "dice.tsv", package="celldex", mustWork=TRUE)
+src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
+m <- match(coldata$label.fine, src[,1])
+stopifnot(all(!is.na(m))) # sanity check
+
+matched <- src[m, 2]
+matched[matched==""] <- NA_character_
+coldata$label.ont <- matched
+coldata
+```
+
+Assembling some metadata.
+
+```{r}
+meta <- list(
+    title="Human bulk RNA-seq data from DICE",
+    description=paste(c(
+        "Normalized expression values of 1561 bulk RNA-seq samples of sorted human immune cell populations from the Database of Immune Cell Expression (DICE).",
+        "TPM normalized values for each cell type were downloaded from https://dice-database.org/downloads.",
+        "Genes with no reads across samples were removed, and values were log~2~-normalized after a pseudocount of 1 was added.",
+        "Samples were annotated to 5 main cell types (`label.main`):",
+        "- B cells",
+        "- Monocytes",
+        "- NK cells",
+        "- T cells, CD8+",
+        "- T cells, CD4+",
+        "",
+        "These labels were further resolved to 15 fine cell types (`label.fine`):",
+        "- B cells, naive",
+        "- Monocytes, CD14+",
+        "- Monocytes, CD16+",
+        "- NK cells",
+        "- T cells, memory TREG",
+        "- T cells, CD4+, naive",
+        "- T cells, CD4+, naive, stimulated",
+        "- T cells, CD4+, naive Treg",
+        "- T cells, CD4+, Th1",
+        "- T cells, CD4+, Th1_17",
+        "- T cells, CD4+, Th2",
+        "- T cells, CD8+, naïve",
+        "- T cells, CD8+, naïve, stimulated",
+        "- T cells, CD4+, TFH",
+        "- T cells, CD4+, Th17",
+        "",
+        "The fine types have also been mapped to the Cell Ontology (`label.ont`)."
+    ), collapse="\n"),
+    taxonomy_id="9606",
+    genome=character(0), # dunno, it doesn't say.
+    sources=list(
+        list(provider="PubMed", id="30449622"),
+        list(provider="ExperimentHub", id=norm.hub$ah_id),
+        list(provider="ExperimentHub", id=coldata.hub$ah_id),
+        list(provider="URL", id="https://dice-database.org/downloads", version="2019-09-04")
+    ),
+    maintainer_name="Jared Andrews",
+    maintainer_email="jared.andrews07@gmail.com"
+)
+```
+
+Saving it to disk.
+
+```{r}
+library(celldex)
+path <- "2024-02-26_output"
+saveReference(norm, coldata, path, meta)
+```

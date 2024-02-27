@@ -87,14 +87,18 @@
 #' ref.se <- NovershternHematopoieticData()
 #' 
 #' @export
-NovershternHematopoieticData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none")) {
-    se <- .create_se("dmap", 
-        version = c(logcounts="1.0.0", coldata="1.2.0"), 
-        assays="logcounts", rm.NA = "none",
-        has.rowdata = FALSE, has.coldata = TRUE)
+NovershternHematopoieticData <- function(ensembl=FALSE, cell.ont=c("all", "nonna", "none"), legacy=FALSE) {
+    cell.ont <- match.arg(cell.ont)
 
-    se <- .convert_to_ensembl(se, "Hs", ensembl)
-    se <- .add_ontology(se, "novershtern", match.arg(cell.ont))
+    if (!legacy && cell.ont == "all") {
+        se <- fetchReference("novershtern_hematopoietic", "2024-02-26", realize.assays=TRUE)
+    } else {
+        se <- .create_se("dmap", 
+            version = c(logcounts="1.0.0", coldata="1.2.0"), 
+            assays="logcounts", rm.NA = "none",
+            has.rowdata = FALSE, has.coldata = TRUE)
+        se <- .add_ontology(se, "novershtern", cell.ont)
+    }
 
-    se
+    .convert_to_ensembl(se, "Hs", ensembl)
 }

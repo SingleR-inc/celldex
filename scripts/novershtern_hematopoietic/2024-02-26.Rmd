@@ -1,0 +1,126 @@
+# From ExperimentHub to gypsum
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, message=FALSE)
+```
+
+Pulling assets from ExperimentHub.
+
+```{r}
+library(ExperimentHub)
+hub <- ExperimentHub()
+prefix <- "celldex/dmap/"
+norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
+stopifnot(nrow(norm.hub) == 1L)
+norm <- norm.hub[[1]]
+str(norm)
+coldata.hub <- hub[hub$rdatapath==paste0(prefix, "1.2.0/coldata.rds")] # fixed umlaut.
+stopifnot(nrow(coldata.hub) == 1L)
+coldata <- coldata.hub[[1]]
+coldata
+```
+
+Attaching ontology mappings.
+
+```{r}
+path <- system.file("mapping", "novershtern.tsv", package="celldex", mustWork=TRUE)
+src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
+m <- match(coldata$label.fine, src[,1])
+stopifnot(all(!is.na(m))) # sanity check
+
+matched <- src[m, 2]
+matched[matched==""] <- NA_character_
+coldata$label.ont <- matched
+coldata
+```
+
+Assembling some metadata.
+
+```{r}
+meta <- list(
+    title="Bulk microarray expression of sorted hematopoietic cells from Novershtern et al.",
+    description=paste(c(
+        "Log-normalized expression values for 211 human microarray samples from Novershtern et al. (2011).",
+        "A matrix of RMA-normalized expression values was downloaded from GEO using the accession GSE24759.",
+        "For genes with multiple probes, only the probe with the highest average expression was retained.",
+        "Samples were annotated to 16 main cell types (`label.main`):",
+        "- Basophils",
+        "- B cells",
+        "- CMPs",
+        "- Dendritic cells",
+        "- Eosinophils",
+        "- Erythroid cells",
+        "- GMPS",
+        "- Granulocytes",
+        "- HSCs",
+        "- Megakaryocytes",
+        "- MEPs",
+        "- Monocytes",
+        "- NK cells",
+        "- NK T cells",
+        "- CD8+ T cells",
+        "- CD4+ T cells",
+        "",
+        "These labels were further resolved into 38 fine cell types (`label.fine`):",
+        "- Basophils",
+        "- Naive B cells",
+        "- Mature B cells class able to switch",
+        "- Mature B cells",
+        "- Mature B cells class switched",
+        "- Common myeloid progenitors",
+        "- Plasmacytoid Dendritic Cells",
+        "- Myeloid Dendritic Cells",
+        "- Eosinophils",
+        "- Erythroid_CD34+ CD71+ GlyA-",
+        "- Erythroid_CD34- CD71+ GlyA-",
+        "- Erythroid_CD34- CD71+ GlyA+",
+        "- Erythroid_CD34- CD71lo GlyA+",
+        "- Erythroid_CD34- CD71- GlyA+",
+        "- Granulocyte/monocyte progenitors",
+        "- Colony Forming Unit-Granulocytes",
+        "- Granulocyte (Neutrophilic Metamyelocytes)",
+        "- Granulocyte (Neutrophils)",
+        "- Hematopoietic stem cells_CD133+ CD34dim",
+        "- Hematopoietic stem cell_CD38- CD34+",
+        "- Colony Forming Unit-Megakaryocytic",
+        "- Megakaryocytes",
+        "- Megakaryocyte/erythroid progenitors",
+        "- Colony Forming Unit-Monocytes",
+        "- Monocytes",
+        "- Mature NK cells_CD56- CD16+ CD3-",
+        "- Mature NK cells_CD56+ CD16+ CD3-",
+        "- Mature NK cells_CD56- CD16- CD3-",
+        "- NK T cells",
+        "- Early B cells",
+        "- Pro B cells",
+        "- CD8+ Effector Memory RA",
+        "- Naive CD8+ T cells",
+        "- CD8+ Effector Memory",
+        "- CD8+ Central Memory",
+        "- Naive CD4+ T cells",
+        "- CD4+ Effector Memory",
+        "- CD4+ Central Memory",
+        "",
+        "The fine types have also been mapped to the Cell Ontology (`label.ont`)."
+    ), collapse="\n"),
+    taxonomy_id="9606",
+    genome=character(0), # dunno, it doesn't say.
+    sources=list(
+        list(provider="PubMed", id="21241896"),
+        list(provider="GEO", id="GSE24759"),
+        list(provider="ExperimentHub", id=norm.hub$ah_id),
+        list(provider="ExperimentHub", id=coldata.hub$ah_id)
+    ),
+    maintainer_name="Jared Andrews",
+    maintainer_email="jared.andrews07@gmail.com"
+)
+```
+
+Saving it to disk.
+
+```{r}
+library(celldex)
+path <- "2024-02-26_output"
+saveReference(norm, coldata, path, meta)
+```

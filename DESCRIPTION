@@ -1,7 +1,7 @@
 Package: celldex
-Title: Reference Index for Cell Types 
-Version: 1.13.0
-Date: 2023-05-24
+Title: Index of Reference Cell Type Datasets
+Version: 1.13.1
+Date: 2024-02-27
 Authors@R: c(person("Dvir", "Aran", email="dvir.aran@ucsf.edu", role=c("aut")),
     person("Aaron", "Lun", email="infinite.monkeys.with.keyboards@gmail.com", role=c("aut", "cre", "cph")),
     person("Daniel", "Bunis", role="aut"),
@@ -15,18 +15,29 @@ License: GPL-3
 Depends: SummarizedExperiment
 Imports: 
     utils,
+    methods,
+    Matrix, 
     ExperimentHub,
     AnnotationHub,
     AnnotationDbi,
     S4Vectors,
     DelayedArray,
-    DelayedMatrixStats
+    DelayedMatrixStats,
+    gypsum,
+    alabaster.base,
+    alabaster.matrix,
+    alabaster.se,
+    DBI,
+    RSQLite,
+    jsonlite
 Suggests:
     testthat,
     knitr,
     rmarkdown,
     BiocStyle,
     DT,
+    jsonvalidate,
+    BiocManager,
     ensembldb
 biocViews: 
     ExperimentHub,
@@ -38,4 +49,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 URL: https://github.com/LTLA/celldex
 BugReports: https://support.bioconductor.org/
-RoxygenNote: 7.1.0
+RoxygenNote: 7.3.1

@@ -1,0 +1,111 @@
+# From ExperimentHub to gypsum
+
+```{r, echo=FALSE, results="hide"}
+knitr::opts_chunk$set(error=FALSE, message=FALSE)
+```
+
+Pulling assets from ExperimentHub.
+
+```{r}
+library(ExperimentHub)
+hub <- ExperimentHub()
+prefix <- "celldex/monaco_immune/"
+norm.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/logcounts.rds")]
+stopifnot(nrow(norm.hub) == 1L)
+norm <- norm.hub[[1]]
+str(norm)
+coldata.hub <- hub[hub$rdatapath==paste0(prefix, "1.0.0/coldata.rds")]
+stopifnot(nrow(coldata.hub) == 1L)
+coldata <- coldata.hub[[1]]
+coldata
+```
+
+Attaching ontology mappings.
+
+```{r}
+path <- system.file("mapping", "monaco.tsv", package="celldex", mustWork=TRUE)
+src <- read.delim(path, header=FALSE, stringsAsFactors=FALSE)
+
+m <- match(coldata$label.fine, src[,1])
+stopifnot(all(!is.na(m))) # sanity check
+
+matched <- src[m, 2]
+matched[matched==""] <- NA_character_
+coldata$label.ont <- matched
+coldata
+```
+
+Assembling some metadata.
+
+```{r}
+meta <- list(
+    title="Human bulk RNA-seq data from Monaco et al.",
+    description=paste(c(
+        "Normalized expression values of 114 human RNA-seq samples for Monaco et al. (2019).",
+        "Expression values obtained from GEO (GSE107011) were already TPM normalized.",
+        "Additional processing was performed to remove unsorted samples, remove non-expressed genes, collapse duplicate genes, and log~2~-normalize the expression values.",
+        "Samples were annotated to 10 main cell types (`label.main`):",
+        "- CD8+ T cells",
+        "- T cells",
+        "- CD4+ T cells",
+        "- Progenitors",
+        "- B cells",
+        "- Monocytes",
+        "- NK cells",
+        "- Dendritic cells",
+        "- Neutrophils",
+        "- Basophils",
+        "",
+        "Samples were additionally annotated to 29 fine cell types (`label.fine`):",
+        "- Naive CD8 T cells",
+        "- Central memory CD8 T cells",
+        "- Effector memory CD8 T cells",
+        "- Terminal effector CD8 T cells",
+        "- MAIT cells",
+        "- Vd2 gd T cells",
+        "- Non-Vd2 gd T cells",
+        "- Follicular helper T cells",
+        "- T regulatory cells",
+        "- Th1 cells",
+        "- Th1/Th17 cells",
+        "- Th17 cells",
+        "- Th2 cells",
+        "- Naive CD4 T cells",
+        "- Terminal effector CD4 T cells",
+        "- Progenitor cells",
+        "- Naive B cells",
+        "- Non-switched memory B cells",
+        "- Exhausted B cells",
+        "- Switched memory B cells",
+        "- Plasmablasts",
+        "- Classical monocytes",
+        "- Intermediate monocytes",
+        "- Non classical monocytes",
+        "- Natural killer cells",
+        "- Plasmacytoid dendritic cells",
+        "- Myeloid dendritic cells",
+        "- Low-density neutrophils",
+        "- Low-density basophils",
+        "",
+        "The subtypes have also been mapped to the Cell Ontology (`label.ont`)."
+    ), collapse="\n"),
+    taxonomy_id="9606",
+    genome="GRCh38",
+    sources=list(
+        list(provider="PubMed", id="30726743"),
+        list(provider="GEO", id="GSE107011"),
+        list(provider="ExperimentHub", id=norm.hub$ah_id),
+        list(provider="ExperimentHub", id=coldata.hub$ah_id)
+    ),
+    maintainer_name="Jared Andrews",
+    maintainer_email="jared.andrews07@gmail.com"
+)
+```
+
+Saving it to disk.
+
+```{r}
+library(celldex)
+path <- "2024-02-26_output"
+saveReference(norm, coldata, path, meta)
+```
