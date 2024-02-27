@@ -33,7 +33,7 @@
 #' @export
 #' @importFrom gypsum cacheDirectory saveVersion
 #' @importFrom alabaster.base altReadObjectFunction altReadObject
-fetchReference <- function(name, version, path=NA, package="celldex", cache=cacheDirectory(), overwrite=FALSE, realize.assays=FALSE, realize.reduced.dims=TRUE, ...) {
+fetchReference <- function(name, version, path=NA, package="celldex", cache=cacheDirectory(), overwrite=FALSE, realize.assays=FALSE, ...) {
     version_path <- saveVersion(package, name, version, cache=cache, overwrite=overwrite)
 
     obj_path <- version_path
@@ -60,9 +60,9 @@ fetchMetadata <- function(name, version, path=NA, package="celldex", cache=cache
     fromJSON(local_path, simplifyVector=FALSE)
 }
 
+#' @import methods
 #' @importFrom alabaster.base readObjectFile readObject
 #' @importFrom SummarizedExperiment assay assay<-
-#' @importFrom SingleCellExperiment reducedDim reducedDim<-
 cdLoadObject <- function(path, metadata=NULL, celldex.realize.assays=FALSE, ...) {
     if (is.null(metadata)) {
         metadata <- readObjectFile(path)
@@ -85,6 +85,7 @@ cdLoadObject <- function(path, metadata=NULL, celldex.realize.assays=FALSE, ...)
     ans
 }
 
+#' @import methods
 #' @importClassesFrom alabaster.matrix ReloadedArray
 #' @importFrom DelayedArray is_sparse type
 #' @importClassesFrom Matrix lgCMatrix dgCMatrix

@@ -15,6 +15,8 @@ License: GPL-3
 Depends: SummarizedExperiment
 Imports: 
     utils,
+    methods,
+    Matrix, 
     ExperimentHub,
     AnnotationHub,
     AnnotationDbi,
@@ -23,7 +25,10 @@ Imports:
     DelayedMatrixStats,
     gypsum,
     alabaster.base,
+    alabaster.matrix,
     alabaster.se,
+    DBI,
+    RSQLite,
     jsonlite
 Suggests:
     testthat,
@@ -32,6 +37,7 @@ Suggests:
     BiocStyle,
     DT,
     jsonvalidate,
+    BiocManager,
     ensembldb
 biocViews: 
     ExperimentHub,

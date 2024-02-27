@@ -45,6 +45,7 @@ surveyReferences <- function(cache=cacheDirectory(), overwrite=FALSE, latest=TRU
     sanitize_query_to_output(everything, latest)
 }
 
+#' @import methods
 #' @importFrom S4Vectors DataFrame
 #' @importFrom jsonlite fromJSON
 sanitize_query_to_output <- function(results, latest, meta.name="meta") {
@@ -99,6 +100,7 @@ extract_atomic_from_json <- function(metadata, extract, type) {
     }, vector(type, 1))
 }
 
+#' @import methods
 extract_charlist_from_json <- function(metadata, extract) {
     output <- lapply(metadata, function(y) {
         x <- extract(y)
