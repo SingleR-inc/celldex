@@ -9,7 +9,7 @@ author:
   affiliation: Applied Bioinformatics Core, Weill Cornell Medicine
 - name: Daniel Bunis
   affiliation: Bakar Computational Health Sciences Institute, University of California San Francisco, San Francisco, CA
-date: "Revised: February 26, 2024"
+date: "Revised: February 29, 2024"
 output:
   BiocStyle::html_document:
     toc_float: true
@@ -216,7 +216,6 @@ Just follow these simple steps for instant fame and prestige.
    Let's just make up something here.
 
     ```{r}
-    library(SingleCellExperiment)
     norm <- matrix(runif(1000), ncol=20)
     rownames(norm) <- sprintf("GENE_%i", seq_len(nrow(norm)))
 
