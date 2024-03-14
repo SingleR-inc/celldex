@@ -35,7 +35,11 @@ Check out the [user's guide](https://bioconductor.org/packages/release/data/expe
 
 ## Maintainer notes
 
-Prospective uploaders can be given temporary upload permissions for, e.g., a week, by calling:
+If someone wants to contribute a new dataset, they should follow the instructions in the user's guide.
+This requires a bit of effort on our (i.e., the package maintainers') part to process a new submission.
+
+Once a prospective uploader has prepared their `SummarizedExperiment` and its associated metadata,
+they can be given temporary upload permissions for, e.g., a week, by calling:
 
 ```r
 gypsum::setPermissions("celldex", uploaders=list(
@@ -48,22 +52,26 @@ gypsum::setPermissions("celldex", uploaders=list(
 )
 ```
 
-Once the upload is complete, it's worth pulling down and validating the contents.
+Once the upload is complete, we pull down the dataset for review.
 
 ```r
 cache <- tempfile()
-gypsum::saveVersion(
+dest <- gypsum::saveVersion(
     "celldex", 
     asset="NAME_OF_THE_DATASET_THEY_WANT_TO_UPLOAD",
     version="VERSION_THEY_WANT_TO_UPLOAD",
     cache=cache
 )
 
-# Check that the saved object is valid.
-alabaster.base::validateObject(cache)
+# Check that the saved object is valid. You might need to do this for each
+# subdirectory if they saved multiple objects in a single dataset.
+alabaster.base::validateObject(dest)
+
+# You can also just try loading it for inspection in the R session.
+alabaster.base::readObject(dest)
 
 # Check that the metadata is valid.
-lines <- readLines(file.path(cache, "_bioconductor.json"))
+lines <- readLines(file.path(dest, "_bioconductor.json"))
 gypsum::validateMetadata(paste(lines, collapse="\n"))
 ```
 
