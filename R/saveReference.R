@@ -66,7 +66,7 @@
 #' @importMethodsFrom alabaster.se saveObject
 #' @importFrom DelayedArray type
 #' @importFrom SummarizedExperiment SummarizedExperiment assay<- assayNames colData
-#' @importFrom gypsum fetchMetadataSchema validateMetadata
+#' @importFrom gypsum fetchMetadataSchema validateMetadata formatObjectMetadata
 #' @importFrom jsonlite toJSON 
 saveReference <- function(x, labels, path, metadata) {
     schema <- fetchMetadataSchema()
@@ -105,14 +105,12 @@ saveReference <- function(x, labels, path, metadata) {
     saveObject(se, path, ReloadedArray.reuse.files="symlink")
 
     # Attach some takane metadata to it.
-    takane <- list(type = "summarized_experiment")
-    takane$summarized_experiment = list(
-       rows = nrow(se),
-       columns = ncol(se),
-       assays = I(assayNames(se)),
-       column_annotations = I(colnames(colData(se)))
-    )
-    metadata$applications <- c(metadata$applications, list(takane=takane))
+    takane <- formatObjectMetadata(se)
+    takane$type <- readObjectFile(path)$type
+    if (is.null(metadata$applications)) {
+        metadata$applications <- list()
+    }
+    metadata$applications$takane <- takane
 
     # Second validation with the takane metadata.
     contents <- toJSON(metadata, pretty=4, auto_unbox=TRUE)
