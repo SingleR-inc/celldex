@@ -31,7 +31,7 @@ fetchReference("hpca", "2024-02-26")
 
 And add your own datasets to enable re-use by the wider Bioconductor community.
 
-Check out the [user's guide](https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/celldex.html) for more details.
+Check out the [user's guide](https://bioconductor.org/packages/release/data/experiment/vignettes/celldex/inst/doc/userguide.html) for more details.
 
 ## Maintainer notes
 
